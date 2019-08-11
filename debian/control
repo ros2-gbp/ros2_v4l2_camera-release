@@ -1,0 +1,12 @@
+Source: ros-dashing-v4l2-camera
+Section: misc
+Priority: extra
+Maintainer: Sander G. van Dijk <sgvandijk@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-dashing-ament-cmake-ros, ros-dashing-ament-lint-auto, ros-dashing-ament-lint-common, ros-dashing-camera-info-manager, ros-dashing-image-transport, ros-dashing-rclcpp, ros-dashing-sensor-msgs, ros-dashing-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-dashing-v4l2-camera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-dashing-camera-info-manager, ros-dashing-image-transport, ros-dashing-sensor-msgs, ros-dashing-ros-workspace
+Description: A ROS 2 camera driver using Video4Linux2
