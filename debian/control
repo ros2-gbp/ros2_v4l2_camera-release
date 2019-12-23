@@ -1,0 +1,12 @@
+Source: ros-eloquent-v4l2-camera
+Section: misc
+Priority: optional
+Maintainer: Sander G. van Dijk <sgvandijk@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-eloquent-ament-cmake-ros, ros-eloquent-ament-lint-auto, ros-eloquent-ament-lint-common, ros-eloquent-camera-info-manager, ros-eloquent-image-transport, ros-eloquent-rclcpp, ros-eloquent-rclcpp-components, ros-eloquent-sensor-msgs, ros-eloquent-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-eloquent-v4l2-camera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-eloquent-camera-info-manager, ros-eloquent-image-transport, ros-eloquent-rclcpp, ros-eloquent-rclcpp-components, ros-eloquent-sensor-msgs, ros-eloquent-ros-workspace
+Description: A ROS 2 camera driver using Video4Linux2

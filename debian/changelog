@@ -1,0 +1,14 @@
+ros-eloquent-v4l2-camera (0.1.1-1bionic) bionic; urgency=high
+
+  * Add missing rclcpp_components build dependency
+  * Contributors: Sander G. van Dijk
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Sun, 11 Aug 2019 22:00:00 -0000
+
+ros-eloquent-v4l2-camera (0.1.0-1bionic) bionic; urgency=high
+
+
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Sat, 10 Aug 2019 22:00:00 -0000
+
+
