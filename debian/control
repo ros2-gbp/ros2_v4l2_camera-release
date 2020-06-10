@@ -1,0 +1,12 @@
+Source: ros-foxy-v4l2-camera
+Section: misc
+Priority: optional
+Maintainer: Sander G. van Dijk <sgvandijk@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-ament-cmake-ros, ros-foxy-ament-lint-auto, ros-foxy-ament-lint-common, ros-foxy-camera-info-manager, ros-foxy-image-transport, ros-foxy-rclcpp, ros-foxy-rclcpp-components, ros-foxy-sensor-msgs, ros-foxy-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-foxy-v4l2-camera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-camera-info-manager, ros-foxy-image-transport, ros-foxy-rclcpp, ros-foxy-rclcpp-components, ros-foxy-sensor-msgs, ros-foxy-ros-workspace
+Description: A ROS 2 camera driver using Video4Linux2
