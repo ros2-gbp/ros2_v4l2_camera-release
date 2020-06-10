@@ -1,3 +1,26 @@
+## v4l2_camera (foxy) - 0.1.1-1
+
+The packages in the `v4l2_camera` repository were released into the `foxy` distro by running `/usr/bin/bloom-release v4l2_camera --rosdistro foxy` on `Wed, 10 Jun 2020 10:04:15 -0000`
+
+The `v4l2_camera` package was released.
+
+Version of package(s) in repository `v4l2_camera`:
+
+- upstream repository: https://gitlab.com/boldhearts/ros2_v4l2_camera.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.1.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.9.7`
+- catkin_pkg version: `0.4.16`
+- rosdep version: `0.19.0`
+- rosdistro version: `0.8.0`
+- vcstools version: `0.1.42`
+
+
 ## v4l2_camera (eloquent) - 0.1.1-1
 
 The packages in the `v4l2_camera` repository were released into the `eloquent` distro by running `/usr/bin/bloom-release v4l2_camera --track eloquent --rosdistro eloquent --new-track` on `Mon, 23 Dec 2019 15:02:03 -0000`
