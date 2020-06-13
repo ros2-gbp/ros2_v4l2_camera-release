@@ -17,8 +17,8 @@
 
 #include "v4l2_camera/v4l2_camera_device.hpp"
 
-#include <camera_info_manager/camera_info_manager.h>
-#include <image_transport/image_transport.h>
+#include <camera_info_manager/camera_info_manager.hpp>
+#include <image_transport/image_transport.hpp>
 
 #include <rclcpp/rclcpp.hpp>
 #include <rcl_interfaces/msg/parameter.hpp>
@@ -54,6 +54,7 @@ private:
   std::thread capture_thread_;
   std::atomic<bool> canceled_;
 
+  std::string camera_frame_id_;
   std::string output_encoding_;
 
   std::map<std::string, int32_t> control_name_to_id_;
@@ -61,6 +62,7 @@ private:
   void createParameters();
   bool handleParameter(rclcpp::Parameter const & param);
 
+  bool requestPixelFormat(std::string const & fourcc);
   bool requestImageSize(std::vector<int64_t> const & size);
 
   sensor_msgs::msg::Image::UniquePtr convert(sensor_msgs::msg::Image const & img) const;
