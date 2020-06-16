@@ -1,0 +1,24 @@
+ros-rolling-v4l2-camera (0.2.0-2focal) focal; urgency=high
+
+  * Set frame_id on published images, default to "camera"
+  * Output FOURCC code of available formats
+  * Add parameter for setting the pixel format
+    Default to using YUYV
+  * Contributors: Sander G. van Dijk
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Sat, 13 Jun 2020 04:00:00 -0000
+
+ros-rolling-v4l2-camera (0.1.1-2focal) focal; urgency=high
+
+  * Add missing rclcpp_components build dependency
+  * Contributors: Sander G. van Dijk
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Mon, 12 Aug 2019 04:00:00 -0000
+
+ros-rolling-v4l2-camera (0.1.0-2focal) focal; urgency=high
+
+
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Sun, 11 Aug 2019 04:00:00 -0000
+
+
