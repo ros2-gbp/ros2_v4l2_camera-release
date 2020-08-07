@@ -2,6 +2,11 @@
 Changelog for package v4l2_camera
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.1 (2020-08-06)
+------------------
+* Hold reference to parameters callback handle
+* Contributors: Jacob Perron
+
 0.2.0 (2020-06-13)
 ------------------
 * Set frame_id on published images, default to "camera"
