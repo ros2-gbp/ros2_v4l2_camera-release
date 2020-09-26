@@ -1,0 +1,40 @@
+ros-foxy-v4l2-camera (0.3.0-1focal) focal; urgency=high
+
+  * Publishing is done on private topics to enable remapping of the namespace (!22)
+  * CameraInfo is published in intra-process communication mode (!24)
+  * Added parameter descriptions (!25)
+  * Contributors: Christian Rauch, Marcus M. Scheunemann, Sander G. van Dijk
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Fri, 25 Sep 2020 23:00:00 -0000
+
+ros-foxy-v4l2-camera (0.2.1-1focal) focal; urgency=high
+
+  * Hold reference to parameters callback handle
+  * Contributors: Jacob Perron
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Wed, 05 Aug 2020 23:00:00 -0000
+
+ros-foxy-v4l2-camera (0.2.0-1focal) focal; urgency=high
+
+  * Set frame_id on published images, default to "camera"
+  * Output FOURCC code of available formats
+  * Add parameter for setting the pixel format
+    Default to using YUYV
+  * Contributors: Sander G. van Dijk
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Fri, 12 Jun 2020 23:00:00 -0000
+
+ros-foxy-v4l2-camera (0.1.1-1focal) focal; urgency=high
+
+  * Add missing rclcpp_components build dependency
+  * Contributors: Sander G. van Dijk
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Sun, 11 Aug 2019 23:00:00 -0000
+
+ros-foxy-v4l2-camera (0.1.0-1focal) focal; urgency=high
+
+
+
+ -- Sander G. van Dijk <sgvandijk@gmail.com>  Sat, 10 Aug 2019 23:00:00 -0000
+
+
