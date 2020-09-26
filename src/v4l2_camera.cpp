@@ -22,6 +22,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "v4l2_camera/fourcc.hpp"
+
 #include "rclcpp_components/register_node_macro.hpp"
 
 using namespace std::chrono_literals;
@@ -33,6 +35,16 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
 : rclcpp::Node{"v4l2_camera", options},
   canceled_{false}
 {
+  // Prepare publisher
+  // This should happen before registering on_set_parameters_callback,
+  // else transport plugins will fail to declare their parameters
+  if (options.use_intra_process_comms()) {
+    image_pub_ = create_publisher<sensor_msgs::msg::Image>("image_raw", 10);
+    info_pub_ = create_publisher<sensor_msgs::msg::CameraInfo>("camera_info", 10);
+  } else {
+    camera_transport_pub_ = image_transport::create_camera_publisher(this, "image_raw");
+  }
+
   // Prepare camera
   auto device = declare_parameter<std::string>("video_device", "/dev/video0");
   camera_ = std::make_shared<V4l2CameraDevice>(device);
@@ -41,21 +53,10 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
     return;
   }
 
-  // Request pixel format
-  auto pixel_format = declare_parameter<std::string>("pixel_format", "YUYV");
-  requestPixelFormat(pixel_format);
-
   cinfo_ = std::make_shared<camera_info_manager::CameraInfoManager>(this, camera_->getCameraName());
 
   // Read parameters and set up callback
   createParameters();
-
-  // Prepare publisher
-  if (options.use_intra_process_comms()) {
-    image_pub_ = create_publisher<sensor_msgs::msg::Image>("/image_raw", 10);
-  } else {
-    camera_transport_pub_ = image_transport::create_camera_publisher(this, "/image_raw");
-  }
 
   // Start the camera
   if (!camera_->start()) {
@@ -68,6 +69,12 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
       while (rclcpp::ok() && !canceled_.load()) {
         RCLCPP_DEBUG(get_logger(), "Capture...");
         auto img = camera_->capture();
+        if (img == nullptr) {
+          // Failed capturing image, assume it is temporarily and continue a bit later
+          std::this_thread::sleep_for(std::chrono::milliseconds(10));
+          continue;
+        }
+
         auto stamp = now();
         if (img->encoding != output_encoding_) {
           img = convert(*img);
@@ -75,22 +82,21 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
         img->header.stamp = stamp;
         img->header.frame_id = camera_frame_id_;
 
+        auto ci = std::make_unique<sensor_msgs::msg::CameraInfo>(cinfo_->getCameraInfo());
+        if (!checkCameraInfo(*img, *ci)) {
+          *ci = sensor_msgs::msg::CameraInfo{};
+          ci->height = img->height;
+          ci->width = img->width;
+        }
+
+        ci->header.stamp = stamp;
+
         if (get_node_options().use_intra_process_comms()) {
-          std::stringstream ss;
-          ss << "Image message address [PUBLISH]:\t" << img.get();
-          RCLCPP_DEBUG(get_logger(), ss.str());
+          RCLCPP_DEBUG_STREAM(get_logger(), "Image message address [PUBLISH]:\t" << img.get());
           image_pub_->publish(std::move(img));
+          info_pub_->publish(std::move(ci));
         } else {
-          auto ci = cinfo_->getCameraInfo();
-          if (!checkCameraInfo(*img, ci)) {
-            ci = sensor_msgs::msg::CameraInfo{};
-            ci.height = img->height;
-            ci.width = img->width;
-          }
-
-          ci.header.stamp = stamp;
-
-          camera_transport_pub_.publish(*img, ci);
+          camera_transport_pub_.publish(*img, *ci);
         }
       }
     }
@@ -123,9 +129,43 @@ void V4L2Camera::createParameters()
   camera_frame_id_ = declare_parameter<std::string>("camera_frame_id", "camera");
 
   // Format parameters
+  // Pixel format
+  auto const & image_formats = camera_->getImageFormats();
+  auto pixel_format_descriptor = rcl_interfaces::msg::ParameterDescriptor{};
+  pixel_format_descriptor.name = "pixel_format";
+  pixel_format_descriptor.description = "Pixel format (FourCC)";
+  auto pixel_format_constraints = std::ostringstream{};
+  for (auto const & format : image_formats) {
+    pixel_format_constraints <<
+      "\"" << FourCC::toString(format.pixelFormat) << "\"" <<
+      " (" << format.description << "), ";
+  }
+  auto str = pixel_format_constraints.str();
+  str = str.substr(0, str.size() - 2);
+  pixel_format_descriptor.additional_constraints = str;
+  auto pixel_format =
+    declare_parameter<std::string>("pixel_format", "YUYV", pixel_format_descriptor);
+  requestPixelFormat(pixel_format);
+
+  // Image size
   using ImageSize = std::vector<int64_t>;
   auto image_size = ImageSize{};
-  image_size = declare_parameter<ImageSize>("image_size", {640, 480});
+  auto image_size_descriptor = rcl_interfaces::msg::ParameterDescriptor{};
+  image_size_descriptor.name = "image_size";
+  image_size_descriptor.description = "Image width & height";
+  // List available image sizes per format
+  auto const & image_sizes = camera_->getImageSizes();
+  auto image_sizes_constraints = std::ostringstream{};
+  image_sizes_constraints << "Available image sizes:";
+  for (auto const & format : image_formats) {
+    image_sizes_constraints << "\n" << FourCC::toString(format.pixelFormat) << " (" <<
+      format.description << ")";
+    for (auto const & image_size : image_sizes.at(format.pixelFormat)) {
+      image_sizes_constraints << "\n\t" << image_size.first << "x" << image_size.second;
+    }
+  }
+  image_size_descriptor.additional_constraints = image_sizes_constraints.str();
+  image_size = declare_parameter<ImageSize>("image_size", {640, 480}, image_size_descriptor);
   requestImageSize(image_size);
 
   // Control parameters
@@ -141,23 +181,37 @@ void V4L2Camera::createParameters()
 
   for (auto const & c : camera_->getControls()) {
     auto name = toParamName(c.name);
+    auto descriptor = rcl_interfaces::msg::ParameterDescriptor{};
+    descriptor.name = name;
+    descriptor.description = c.name;
     switch (c.type) {
       case ControlType::INT:
         {
-          auto value = declare_parameter<int64_t>(name, camera_->getControlValue(c.id));
+          auto current_value = camera_->getControlValue(c.id);
+          auto range = rcl_interfaces::msg::IntegerRange{};
+          range.from_value = c.minimum;
+          range.to_value = c.maximum;
+          descriptor.integer_range.push_back(range);
+          auto value = declare_parameter<int64_t>(name, current_value, descriptor);
           camera_->setControlValue(c.id, value);
           break;
         }
       case ControlType::BOOL:
         {
-          auto value = declare_parameter<bool>(name, camera_->getControlValue(c.id) != 0);
+          auto value =
+            declare_parameter<bool>(name, camera_->getControlValue(c.id) != 0, descriptor);
           camera_->setControlValue(c.id, value);
           break;
         }
       case ControlType::MENU:
         {
-          // TODO(sander): treating as integer parameter, implement full menu functionality
-          auto value = declare_parameter<int64_t>(name, camera_->getControlValue(c.id));
+          auto sstr = std::ostringstream{};
+          for (auto const & o : c.menuItems) {
+            sstr << o.first << " - " << o.second << ", ";
+          }
+          auto str = sstr.str();
+          descriptor.additional_constraints = str.substr(0, str.size() - 2);
+          auto value = declare_parameter<int64_t>(name, camera_->getControlValue(c.id), descriptor);
           camera_->setControlValue(c.id, value);
           break;
         }
@@ -165,7 +219,7 @@ void V4L2Camera::createParameters()
         RCLCPP_WARN(
           get_logger(),
           std::string{"Control type not currently supported: "} + std::to_string(unsigned(c.type)) +
-          ", for controle: " + c.name);
+          ", for control: " + c.name);
         continue;
     }
     control_name_to_id_[name] = c.id;
@@ -202,7 +256,12 @@ bool V4L2Camera::handleParameter(rclcpp::Parameter const & param)
   } else if (param.get_name() == "output_encoding") {
     output_encoding_ = param.as_string();
     return true;
-  } else if (param.get_name() == "size") {
+  } else if (param.get_name() == "pixel_format") {
+    camera_->stop();
+    auto success = requestPixelFormat(param.as_string());
+    camera_->start();
+    return success;
+  } else if (param.get_name() == "image_size") {
     camera_->stop();
     auto success = requestImageSize(param.as_integer_array());
     camera_->start();
@@ -339,7 +398,7 @@ sensor_msgs::msg::Image::UniquePtr V4L2Camera::convert(sensor_msgs::msg::Image c
 {
   RCLCPP_DEBUG(
     get_logger(),
-    std::string{"Coverting: "} + img.encoding + " -> " + output_encoding_);
+    std::string{"Converting: "} + img.encoding + " -> " + output_encoding_);
 
   // TODO(sander): temporary until cv_bridge and image_proc are available in ROS 2
   if (img.encoding == sensor_msgs::image_encodings::YUV422 &&
