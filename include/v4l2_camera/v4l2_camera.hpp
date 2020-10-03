@@ -44,7 +44,8 @@ private:
   std::shared_ptr<V4l2CameraDevice> camera_;
 
   // Publisher used for intra process comm
-  std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::Image>> image_pub_;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
+  rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr info_pub_;
 
   // Publisher used for inter process comm
   image_transport::CameraPublisher camera_transport_pub_;
@@ -58,6 +59,8 @@ private:
   std::string output_encoding_;
 
   std::map<std::string, int32_t> control_name_to_id_;
+
+  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr on_set_parameters_callback_;
 
   void createParameters();
   bool handleParameter(rclcpp::Parameter const & param);
