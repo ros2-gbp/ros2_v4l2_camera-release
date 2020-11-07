@@ -1,0 +1,12 @@
+Source: ros-rolling-v4l2-camera
+Section: misc
+Priority: optional
+Maintainer: Sander G. van Dijk <sgvandijk@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-rolling-ament-cmake-ros, ros-rolling-ament-lint-auto, ros-rolling-ament-lint-common, ros-rolling-camera-info-manager, ros-rolling-image-transport, ros-rolling-rclcpp, ros-rolling-rclcpp-components, ros-rolling-sensor-msgs, ros-rolling-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-rolling-v4l2-camera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-rolling-camera-info-manager, ros-rolling-image-transport, ros-rolling-rclcpp, ros-rolling-rclcpp-components, ros-rolling-sensor-msgs, ros-rolling-ros-workspace
+Description: A ROS 2 camera driver using Video4Linux2
