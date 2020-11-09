@@ -44,6 +44,16 @@ public:
   int32_t getControlValue(uint32_t id);
   bool setControlValue(uint32_t id, int32_t value);
 
+  // Types used to describe available image sizes
+  enum class ImageSizeType
+  {
+    DISCRETE,
+    STEPWISE,
+    CONTINUOUS
+  };
+  using ImageSizesVector = std::vector<std::pair<uint16_t, uint16_t>>;
+  using ImageSizesDescription = std::pair<ImageSizeType, ImageSizesVector>;
+
   auto const & getImageFormats() const {return image_formats_;}
   auto const & getImageSizes() const {return image_sizes_;}
   auto const & getCurrentDataFormat() const {return cur_data_format_;}
@@ -67,7 +77,7 @@ private:
 
   v4l2_capability capabilities_;
   std::vector<ImageFormat> image_formats_;
-  std::map<unsigned, std::vector<std::pair<uint32_t, uint32_t>>> image_sizes_;
+  std::map<unsigned, ImageSizesDescription> image_sizes_;
   std::vector<Control> controls_;
 
   PixelFormat cur_data_format_;
@@ -79,6 +89,10 @@ private:
 
   // Requests and stores all frame sizes available for this camera
   void listImageSizes();
+
+  ImageSizesDescription listDiscreteImageSizes(v4l2_frmsizeenum frm_size_enum);
+  ImageSizesDescription listStepwiseImageSizes(v4l2_frmsizeenum frm_size_enum);
+  ImageSizesDescription listContinuousImageSizes(v4l2_frmsizeenum frm_size_enum);
 
   // Requests and stores all controls available for this camera
   void listControls();
