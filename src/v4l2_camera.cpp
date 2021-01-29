@@ -46,7 +46,10 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
   }
 
   // Prepare camera
-  auto device = declare_parameter<std::string>("video_device", "/dev/video0");
+  auto device_descriptor = rcl_interfaces::msg::ParameterDescriptor{};
+  device_descriptor.description = "Path to video device";
+  device_descriptor.read_only = true;
+  auto device = declare_parameter<std::string>("video_device", "/dev/video0", device_descriptor);
   camera_ = std::make_shared<V4l2CameraDevice>(device);
 
   if (!camera_->open()) {
@@ -114,7 +117,13 @@ V4L2Camera::~V4L2Camera()
 void V4L2Camera::createParameters()
 {
   // Node parameters
-  output_encoding_ = declare_parameter("output_encoding", std::string{"rgb8"});
+  auto output_encoding_description = rcl_interfaces::msg::ParameterDescriptor{};
+  output_encoding_description.description = "ROS image encoding to use for the output image";
+  output_encoding_description.additional_constraints =
+    "Currently supported: 'rgb8', 'yuv422' or 'mono'";
+  output_encoding_ = declare_parameter(
+    "output_encoding", std::string{"rgb8"},
+    output_encoding_description);
 
   // Camera info parameters
   auto camera_info_url = std::string{};
@@ -122,11 +131,16 @@ void V4L2Camera::createParameters()
     if (cinfo_->validateURL(camera_info_url)) {
       cinfo_->loadCameraInfo(camera_info_url);
     } else {
-      RCLCPP_WARN(get_logger(), std::string{"Invalid camera info URL: "} + camera_info_url);
+      RCLCPP_WARN(get_logger(), "Invalid camera info URL: %s", camera_info_url.c_str());
     }
   }
 
-  camera_frame_id_ = declare_parameter<std::string>("camera_frame_id", "camera");
+  auto camera_frame_id_description = rcl_interfaces::msg::ParameterDescriptor{};
+  camera_frame_id_description.description = "Frame id inserted in published image";
+  camera_frame_id_description.read_only = true;
+  camera_frame_id_ = declare_parameter<std::string>(
+    "camera_frame_id", "camera",
+    camera_frame_id_description);
 
   // Format parameters
   // Pixel format
@@ -245,8 +259,9 @@ void V4L2Camera::createParameters()
       default:
         RCLCPP_WARN(
           get_logger(),
-          std::string{"Control type not currently supported: "} + std::to_string(unsigned(c.type)) +
-          ", for control: " + c.name);
+          "Control type not currently supported: %s, for control: %s",
+          std::to_string(unsigned(c.type)).c_str(),
+          c.name.c_str());
         continue;
     }
     control_name_to_id_[name] = c.id;
@@ -276,9 +291,8 @@ bool V4L2Camera::handleParameter(rclcpp::Parameter const & param)
       default:
         RCLCPP_WARN(
           get_logger(),
-          std::string{"Control parameter type not currently supported: "} +
-          std::to_string(unsigned(param.get_type())) +
-          ", for parameter: " + param.get_name());
+          "Control parameter type not currently supported: %s, for parameter: %s",
+          std::to_string(unsigned(param.get_type())).c_str(), param.get_name().c_str());
     }
   } else if (param.get_name() == "output_encoding") {
     output_encoding_ = param.as_string();
@@ -298,7 +312,7 @@ bool V4L2Camera::handleParameter(rclcpp::Parameter const & param)
     if (cinfo_->validateURL(camera_info_url)) {
       return cinfo_->loadCameraInfo(camera_info_url);
     } else {
-      RCLCPP_WARN(get_logger(), std::string{"Invalid camera info URL: "} + camera_info_url);
+      RCLCPP_WARN(get_logger(), "Invalid camera info URL: %s", camera_info_url.c_str());
       return false;
     }
   }
@@ -330,7 +344,8 @@ bool V4L2Camera::requestImageSize(std::vector<int64_t> const & size)
   if (size.size() != 2) {
     RCLCPP_WARN(
       get_logger(),
-      "Invalid image size; expected dimensions: 2, actual: " + std::to_string(size.size()));
+      "Invalid image size; expected dimensions: 2, actual: %s",
+      std::to_string(size.size()).c_str());
     return false;
   }
 
@@ -425,7 +440,7 @@ sensor_msgs::msg::Image::UniquePtr V4L2Camera::convert(sensor_msgs::msg::Image c
 {
   RCLCPP_DEBUG(
     get_logger(),
-    std::string{"Converting: "} + img.encoding + " -> " + output_encoding_);
+    "Converting: %s -> %s", img.encoding.c_str(), output_encoding_.c_str());
 
   // TODO(sander): temporary until cv_bridge and image_proc are available in ROS 2
   if (img.encoding == sensor_msgs::image_encodings::YUV422 &&
@@ -446,7 +461,7 @@ sensor_msgs::msg::Image::UniquePtr V4L2Camera::convert(sensor_msgs::msg::Image c
   } else {
     RCLCPP_WARN_ONCE(
       get_logger(),
-      std::string{"Conversion not supported yet: "} + img.encoding + " -> " + output_encoding_);
+      "Conversion not supported yet: %s -> %s", img.encoding.c_str(), output_encoding_.c_str());
     return nullptr;
   }
 }
