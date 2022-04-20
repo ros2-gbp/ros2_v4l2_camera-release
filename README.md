@@ -1,3 +1,26 @@
+## v4l2_camera (humble) - 0.4.0-1
+
+The packages in the `v4l2_camera` repository were released into the `humble` distro by running `/home/parallels/Documents/humble-releases/.direnv/python-3.8.10/bin/bloom-release -r humble -n v4l2_camera` on `Wed, 20 Apr 2022 22:58:54 -0000`
+
+The `v4l2_camera` package was released.
+
+Version of package(s) in repository `v4l2_camera`:
+
+- upstream repository: https://gitlab.com/boldhearts/ros2_v4l2_camera.git
+- release repository: https://github.com/ros2-gbp/ros2_v4l2_camera-release.git
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.4.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.0`
+- catkin_pkg version: `0.4.24`
+- rosdep version: `0.21.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## v4l2_camera (foxy) - 0.4.0-1
 
 The packages in the `v4l2_camera` repository were released into the `foxy` distro by running `/usr/bin/bloom-release v4l2_camera --rosdistro foxy` on `Fri, 29 Jan 2021 13:24:13 -0000`
