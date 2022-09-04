@@ -50,7 +50,7 @@ publishes images as `sensor_msgs/Image` messages.
 
 #### Published Topics
 
-* `/raw_image` - `sensor_msgs/Image`
+* `/image_raw` - `sensor_msgs/Image`
 
     The image.
 
@@ -77,6 +77,16 @@ publishes images as `sensor_msgs/Image` messages.
 * `image_size` - `integer_array`, default: `[640, 480]`
 
     Width and height of the image.
+
+* `time_per_frame` - `integer_array`, default: current device setting
+
+    The time between two successive frames. The expected value is a
+    ratio defined by an array of 2 integers. For instance, a value of
+    `[1, 30]` sets a period of 1/30, and thus a framrate of 30Hz.
+
+    If the provided period is not supported, the driver may choose
+    another period near to it. In that case the parameter change is
+    reported to have failed.
 
 * Camera Control Parameters
 
