@@ -17,16 +17,15 @@
 
 #include "v4l2_camera/v4l2_camera_device.hpp"
 
-#include <camera_info_manager/camera_info_manager.hpp>
-#include <image_transport/image_transport.hpp>
-
-#include <rclcpp/rclcpp.hpp>
-#include <rcl_interfaces/msg/parameter.hpp>
-
 #include <memory>
 #include <string>
 #include <map>
 #include <vector>
+
+#include <camera_info_manager/camera_info_manager.hpp>
+#include <image_transport/image_transport.hpp>
+#include <rcl_interfaces/msg/parameter.hpp>
+#include <rclcpp/rclcpp.hpp>
 
 #include "v4l2_camera/visibility_control.h"
 
@@ -41,9 +40,6 @@ public:
   virtual ~V4L2Camera();
 
 private:
-  using ImageSize = std::vector<int64_t>;
-  using TimePerFrame = std::vector<int64_t>;
-
   std::shared_ptr<V4l2CameraDevice> camera_;
 
   // Publisher used for intra process comm
@@ -69,9 +65,7 @@ private:
   bool handleParameter(rclcpp::Parameter const & param);
 
   bool requestPixelFormat(std::string const & fourcc);
-  bool requestImageSize(ImageSize const & size);
-
-  bool requestTimePerFrame(TimePerFrame const & timePerFrame);
+  bool requestImageSize(std::vector<int64_t> const & size);
 
   sensor_msgs::msg::Image::UniquePtr convert(sensor_msgs::msg::Image const & img) const;
 

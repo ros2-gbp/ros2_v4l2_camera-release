@@ -2,6 +2,13 @@
 Changelog for package v4l2_camera
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.6.0 (2022-09-04)
+------------------
+* Use cv_bridge to perform conversions
+* Fix: Image topic should be image_raw, not raw_image, in README.md
+* Fix: Properly declare camera_info_url parameter
+* Contributors: Marcus M. Scheunemann, Sander G. van Dijk, ijnek
+
 0.5.0 (2022-08-06)
 ------------------
 * Add time_per_frame parameter to adjust frame rate

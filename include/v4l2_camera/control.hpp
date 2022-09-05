@@ -47,13 +47,13 @@ struct Control
   ControlType type;
 
   /// Minimum value, inclusive
-  int64_t minimum;
+  int minimum;
 
   /// Maximum value, inclusive
-  int64_t maximum;
+  int maximum;
 
   /// The default value of of an integer, boolean, bitmask, menu or integer menu control
-  int64_t defaultValue;
+  int defaultValue;
 
   /// Menu item names by index. Empty if this is not a menu control
   std::map<int, std::string> menuItems;
