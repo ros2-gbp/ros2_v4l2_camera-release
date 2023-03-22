@@ -150,5 +150,4 @@ tracks:
     ros_distro: rolling
     vcs_type: git
     vcs_uri: https://gitlab.com/boldhearts/ros2_v4l2_camera.git
-    version: 0.6.1
-    version_saved: :{auto}
+    version: :{auto}
