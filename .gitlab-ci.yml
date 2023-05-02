@@ -1,4 +1,4 @@
-image: osrf/ros:rolling-desktop
+image: osrf/ros:humble-desktop
 
 variables:
   GIT_CLONE_PATH: $CI_BUILDS_DIR/src/ros2_v4l2_camera
@@ -6,7 +6,7 @@ variables:
 build:
   stage: build
   script:
-    - apt update
+    - apt update && apt upgrade -y
     - cd ${CI_BUILDS_DIR}
     - rosdep update && rosdep install --from-paths src -r -y
     # Build
