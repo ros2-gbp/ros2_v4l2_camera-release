@@ -1,1 +1,1 @@
-{"base": "e1c1ac2", "parent": "debian/rolling/v4l2_camera", "previous": "0146f4f", "trim": "", "trimbase": ""}
+{"base": "383804f", "parent": "debian/jazzy/v4l2_camera", "previous": "a6e43aa", "trim": "", "trimbase": ""}
