@@ -1,3 +1,26 @@
+## v4l2_camera (rolling) - 0.7.1-1
+
+The packages in the `v4l2_camera` repository were released into the `rolling` distro by running `/usr/bin/bloom-release --rosdistro rolling --track rolling v4l2_camera` on `Tue, 30 Apr 2024 08:10:34 -0000`
+
+The `v4l2_camera` package was released.
+
+Version of package(s) in repository `v4l2_camera`:
+
+- upstream repository: https://gitlab.com/boldhearts/ros2_v4l2_camera.git
+- release repository: https://github.com/ros2-gbp/ros2_v4l2_camera-release.git
+- rosdistro version: `0.7.0-2`
+- old version: `0.7.0-2`
+- new version: `0.7.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.23.0`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## v4l2_camera (humble) - 0.6.2-1
 
 The packages in the `v4l2_camera` repository were released into the `humble` distro by running `/usr/bin/bloom-release --rosdistro humble --track humble v4l2_camera` on `Tue, 02 May 2023 19:25:30 -0000`
