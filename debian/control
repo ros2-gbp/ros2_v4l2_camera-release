@@ -1,0 +1,12 @@
+Source: ros-jazzy-v4l2-camera
+Section: misc
+Priority: optional
+Maintainer: Sander G. van Dijk <sgvandijk@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake-ros, ros-jazzy-ament-lint-auto <!nocheck>, ros-jazzy-ament-lint-common <!nocheck>, ros-jazzy-camera-info-manager, ros-jazzy-cv-bridge, ros-jazzy-image-transport, ros-jazzy-rclcpp, ros-jazzy-rclcpp-components, ros-jazzy-sensor-msgs, ros-jazzy-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-v4l2-camera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-camera-info-manager, ros-jazzy-cv-bridge, ros-jazzy-image-transport, ros-jazzy-rclcpp, ros-jazzy-rclcpp-components, ros-jazzy-sensor-msgs, ros-jazzy-ros-workspace
+Description: A ROS 2 camera driver using Video4Linux2
