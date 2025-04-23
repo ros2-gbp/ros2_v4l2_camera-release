@@ -1,0 +1,12 @@
+Source: ros-kilted-v4l2-camera
+Section: misc
+Priority: optional
+Maintainer: Sander G. van Dijk <sgvandijk@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-kilted-ament-cmake-ros, ros-kilted-ament-lint-auto <!nocheck>, ros-kilted-ament-lint-common <!nocheck>, ros-kilted-camera-info-manager, ros-kilted-cv-bridge, ros-kilted-image-transport, ros-kilted-rclcpp, ros-kilted-rclcpp-components, ros-kilted-sensor-msgs, ros-kilted-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-kilted-v4l2-camera
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kilted-camera-info-manager, ros-kilted-cv-bridge, ros-kilted-image-transport, ros-kilted-rclcpp, ros-kilted-rclcpp-components, ros-kilted-sensor-msgs, ros-kilted-ros-workspace
+Description: A ROS 2 camera driver using Video4Linux2
