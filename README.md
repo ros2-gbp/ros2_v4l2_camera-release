@@ -1,3 +1,26 @@
+## v4l2_camera (jazzy) - 0.7.3-1
+
+The packages in the `v4l2_camera` repository were released into the `jazzy` distro by running `/nix/store/p49qkgz0r4sxgkjbqg9wpg7vkdzxj2m1-python3.13-bloom-0.14.3/bin/bloom-release --rosdistro jazzy v4l2_camera` on `Wed, 29 Jul 2026 19:43:39 -0000`
+
+The `v4l2_camera` package was released.
+
+Version of package(s) in repository `v4l2_camera`:
+
+- upstream repository: https://gitlab.com/boldhearts/ros2_v4l2_camera.git
+- release repository: https://github.com/ros2-gbp/ros2_v4l2_camera-release.git
+- rosdistro version: `0.7.1-1`
+- old version: `0.7.1-1`
+- new version: `0.7.3-1`
+
+Versions of tools used:
+
+- bloom version: `0.14.3`
+- catkin_pkg version: `1.1.0`
+- rosdep version: `0.25.1`
+- rosdistro version: `1.0.1`
+- vcstools version: `0.1.42`
+
+
 ## v4l2_camera (lyrical) - 0.8.1-1
 
 The packages in the `v4l2_camera` repository were released into the `lyrical` distro by running `/nix/store/p49qkgz0r4sxgkjbqg9wpg7vkdzxj2m1-python3.13-bloom-0.14.3/bin/bloom-release --rosdistro lyrical v4l2_camera` on `Mon, 27 Jul 2026 21:23:43 -0000`
