@@ -2,18 +2,12 @@
 Changelog for package v4l2_camera
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.8.1 (2026-07-20)
+0.7.3 (2026-07-29)
 ------------------
-* Update CameraInfoManager creation to use latest rolling signature
-* Update formatting to use clang-format instead of uncrustify
-* Contributors: Sander G. van Dijk
-
-0.8.0 (2025-10-12)
-------------------
-* Make the QoS policies of the publisher configurable
+* Make publisher topic(s) reconfigurable
+* Fix typo in Raspberry Pi instructions
 * Use image_transport to publish using unique_ptr
-* Update CMakeLists.txt to latest conventions
-* Add new QoS parameter to image transport publisher
+* Replace ament_target_dependencies with target_link_libraries
 * Contributors: Alejandro Hernandez Cordero, Błażej Sowa, Sander G. van Dijk
 
 0.7.1 (2024-04-30)

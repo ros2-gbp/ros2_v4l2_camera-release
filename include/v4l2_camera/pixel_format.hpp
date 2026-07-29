@@ -16,6 +16,7 @@
 #define V4L2_CAMERA__PIXEL_FORMAT_HPP_
 
 #include <linux/videodev2.h>
+#include <string>
 
 namespace v4l2_camera
 {
@@ -26,7 +27,8 @@ namespace v4l2_camera
  */
 struct PixelFormat
 {
-  PixelFormat() {}
+  PixelFormat()
+  {}
 
   explicit PixelFormat(v4l2_pix_format const & pf)
   : width{pf.width},
@@ -34,8 +36,7 @@ struct PixelFormat
     pixelFormat{pf.pixelformat},
     bytesPerLine{pf.bytesperline},
     imageByteSize{pf.sizeimage}
-  {
-  }
+  {}
 
   /// Image width in pixels
   unsigned width;
